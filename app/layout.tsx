@@ -7,6 +7,7 @@ import { type Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getServerSideConfig } from "./config/server";
 import { GoogleTagManager } from "@next/third-parties/google";
+import { FunCounterOutput } from "./TestTools";
 const serverConfig = getServerSideConfig();
 
 export const metadata: Metadata = {
@@ -32,7 +33,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log("layout.tsx/RootLayout()");
+  FunCounterOutput(__filename, "RootLayout");
   return (
     <html lang="en">
       <head>

@@ -3,18 +3,23 @@ import { showToast } from "./components/ui-lib";
 import Locale from "./locales";
 import { RequestMessage } from "./client/api";
 import { DEFAULT_MODELS } from "./constant";
+import { FunCounterOutput } from "./TestTools";
 
 export function trimTopic(topic: string) {
+  FunCounterOutput(__filename, "trimTopic");
   // Fix an issue where double quotes still show in the Indonesian language
   // This will remove the specified punctuation from the end of the string
   // and also trim quotes from both the start and end if they exist.
-  return topic
-    // fix for gemini
-    .replace(/^["“”*]+|["“”*]+$/g, "")
-    .replace(/[，。！？”“"、,.!?*]*$/, "");
+  return (
+    topic
+      // fix for gemini
+      .replace(/^["“”*]+|["“”*]+$/g, "")
+      .replace(/[，。！？”“"、,.!?*]*$/, "")
+  );
 }
 
 export async function copyToClipboard(text: string) {
+  FunCounterOutput(__filename, "copyToClipboard");
   try {
     if (window.__TAURI__) {
       window.__TAURI__.writeText(text);
@@ -40,6 +45,7 @@ export async function copyToClipboard(text: string) {
 }
 
 export async function downloadAs(text: string, filename: string) {
+  FunCounterOutput(__filename, "downloadAs");
   if (window.__TAURI__) {
     const result = await window.__TAURI__.dialog.save({
       defaultPath: `${filename}`,
@@ -57,10 +63,7 @@ export async function downloadAs(text: string, filename: string) {
 
     if (result !== null) {
       try {
-        await window.__TAURI__.fs.writeTextFile(
-          result,
-          text
-        );
+        await window.__TAURI__.fs.writeTextFile(result, text);
         showToast(Locale.Download.Success);
       } catch (error) {
         showToast(Locale.Download.Failed);
@@ -86,6 +89,7 @@ export async function downloadAs(text: string, filename: string) {
 }
 
 export function compressImage(file: File, maxSize: number): Promise<string> {
+  FunCounterOutput(__filename, "compressImage");
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (readerEvent: any) => {
@@ -128,6 +132,7 @@ export function compressImage(file: File, maxSize: number): Promise<string> {
 }
 
 export function readFromFile() {
+  FunCounterOutput(__filename, "readFromFile");
   return new Promise<string>((res, rej) => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
@@ -148,11 +153,13 @@ export function readFromFile() {
 }
 
 export function isIOS() {
+  FunCounterOutput(__filename, "isIOS");
   const userAgent = navigator.userAgent.toLowerCase();
   return /iphone|ipad|ipod/.test(userAgent);
 }
 
 export function useWindowSize() {
+  FunCounterOutput(__filename, "useWindowSize");
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -179,11 +186,13 @@ export function useWindowSize() {
 export const MOBILE_MAX_WIDTH = 600;
 export function useMobileScreen() {
   const { width } = useWindowSize();
+  FunCounterOutput(__filename, "useMobileScreen");
 
   return width <= MOBILE_MAX_WIDTH;
 }
 
 export function isFirefox() {
+  FunCounterOutput(__filename, "isFirefox");
   return (
     typeof navigator !== "undefined" && /firefox/i.test(navigator.userAgent)
   );
@@ -191,6 +200,7 @@ export function isFirefox() {
 
 export function selectOrCopy(el: HTMLElement, content: string) {
   const currentSelection = window.getSelection();
+  FunCounterOutput(__filename, "selectOrCopy");
 
   if (currentSelection?.type === "Range") {
     return false;
@@ -202,6 +212,7 @@ export function selectOrCopy(el: HTMLElement, content: string) {
 }
 
 function getDomContentWidth(dom: HTMLElement) {
+  FunCounterOutput(__filename, "getDomContentWidth");
   const style = window.getComputedStyle(dom);
   const paddingWidth =
     parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
@@ -211,6 +222,7 @@ function getDomContentWidth(dom: HTMLElement) {
 
 function getOrCreateMeasureDom(id: string, init?: (dom: HTMLElement) => void) {
   let dom = document.getElementById(id);
+  FunCounterOutput(__filename, "getOrCreateMeasureDom");
 
   if (!dom) {
     dom = document.createElement("span");
@@ -229,6 +241,7 @@ function getOrCreateMeasureDom(id: string, init?: (dom: HTMLElement) => void) {
 }
 
 export function autoGrowTextArea(dom: HTMLTextAreaElement) {
+  FunCounterOutput(__filename, "autoGrowTextArea");
   const measureDom = getOrCreateMeasureDom("__measure");
   const singleLineDom = getOrCreateMeasureDom("__single_measure", (dom) => {
     dom.innerText = "TEXT_FOR_MEASURE";
@@ -251,6 +264,7 @@ export function autoGrowTextArea(dom: HTMLTextAreaElement) {
 }
 
 export function getCSSVar(varName: string) {
+  FunCounterOutput(__filename, "getCSSVar");
   return getComputedStyle(document.body).getPropertyValue(varName).trim();
 }
 
@@ -258,6 +272,7 @@ export function getCSSVar(varName: string) {
  * Detects Macintosh
  */
 export function isMacOS(): boolean {
+  FunCounterOutput(__filename, "isMacOS");
   if (typeof window !== "undefined") {
     let userAgent = window.navigator.userAgent.toLocaleLowerCase();
     const macintosh = /iphone|ipad|ipod|macintosh/.test(userAgent);
@@ -267,6 +282,7 @@ export function isMacOS(): boolean {
 }
 
 export function getMessageTextContent(message: RequestMessage) {
+  FunCounterOutput(__filename, "getMessageTextContent");
   if (typeof message.content === "string") {
     return message.content;
   }
@@ -279,6 +295,7 @@ export function getMessageTextContent(message: RequestMessage) {
 }
 
 export function getMessageImages(message: RequestMessage): string[] {
+  FunCounterOutput(__filename, "getMessageImages");
   if (typeof message.content === "string") {
     return [];
   }
@@ -292,11 +309,9 @@ export function getMessageImages(message: RequestMessage): string[] {
 }
 
 export function isVisionModel(model: string) {
+  FunCounterOutput(__filename, "isVisionModel");
   // Note: This is a better way using the TypeScript feature instead of `&&` or `||` (ts v5.5.0-dev.20240314 I've been using)
-  const visionKeywords = [
-    "vision",
-    "claude-3",
-  ];
+  const visionKeywords = ["vision", "claude-3"];
 
-  return visionKeywords.some(keyword => model.includes(keyword));
+  return visionKeywords.some((keyword) => model.includes(keyword));
 }

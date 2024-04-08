@@ -41,6 +41,7 @@ declare global {
 const ACCESS_CODES = (function getAccessCodes(): Set<string> {
   const code = process.env.CODE;
 
+  FunCounterOutput(__filename, "getAccessCodes");
   try {
     const codes = (code?.split(",") ?? [])
       .filter((v) => !!v)
@@ -52,6 +53,7 @@ const ACCESS_CODES = (function getAccessCodes(): Set<string> {
 })();
 
 export const getServerSideConfig = () => {
+  FunCounterOutput(__filename, "getServerSideConfig");
   if (typeof process === "undefined") {
     throw Error(
       "[Server Config] you are importing a nodejs-only module outside of nodejs",
@@ -79,7 +81,6 @@ export const getServerSideConfig = () => {
     `[Server Config] using ${randomIndex + 1} of ${apiKeys.length} api key`,
   );
 
-  FunCounterOutput(__filename, "getServerSideConfig");
   return {
     baseUrl: process.env.BASE_URL,
     apiKey,

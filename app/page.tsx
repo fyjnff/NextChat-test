@@ -4,10 +4,12 @@ import { Home } from "./components/home";
 
 import { getServerSideConfig } from "./config/server";
 
+import { FunCounterOutput } from "./TestTools";
+
 const serverConfig = getServerSideConfig();
 
 export default async function App() {
-  console.log("page.tsx/App()");
+  FunCounterOutput(__filename, "App");
   return (
     <>
       <Home />

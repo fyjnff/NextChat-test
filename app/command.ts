@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Locale from "./locales";
+import { FunCounterOutput } from "./TestTools";
 
 type Command = (param: string) => void;
 interface Commands {
@@ -13,6 +14,7 @@ interface Commands {
 
 export function useCommand(commands: Commands = {}) {
   const [searchParams, setSearchParams] = useSearchParams();
+  FunCounterOutput(__filename, "useCommand");
 
   useEffect(() => {
     let shouldUpdate = false;
@@ -44,6 +46,7 @@ interface ChatCommands {
 export const ChatCommandPrefix = ":";
 
 export function useChatCommand(commands: ChatCommands = {}) {
+  FunCounterOutput(__filename, "useChatCommand");
   function extract(userInput: string) {
     return (
       userInput.startsWith(ChatCommandPrefix) ? userInput.slice(1) : userInput

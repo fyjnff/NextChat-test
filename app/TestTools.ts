@@ -37,3 +37,22 @@ export function FunCounterOutput(file_name: string, fun_name: string) {
     console.log("FunCounterOutput error");
   }
 }
+
+/*
+ * Steps to add the FunCounterOutput:
+ * 1. import { FunCounterOutput } from "../TestTools" (./TestTools)
+ * 2. FunCounterOutput(__filename, "<Function_Name>");
+ *
+ * The list add the FunCounterOutput:
+ * - azure.ts/makeAzurePath
+ * - command.ts/useCommand
+ * - command.ts/useChatCommand
+ * - utils.ts
+ * - page.tsx/App
+ * - layout.tsx/RootLayout
+ * - config/server.ts/getServerSideConfig
+ * - config/server.ts/getAccessCodes
+ * - config/cilent.ts/getClientConfig
+ * - config/cilent.ts/queryMeta
+ * - config/build.ts/getBuildConfig
+ */
